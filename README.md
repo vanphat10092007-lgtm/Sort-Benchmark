@@ -181,7 +181,7 @@ N = 10.000 chuỗi.
 
 Thuật toán được cài đặt ở lần chạy 2 là sự kết hợp của **Merge Sort** và **Index Sorting**
 
-#### 1. Tổng quan thuật toán
+#### Tổng quan thuật toán
 
 - **Merge Sort** — Thuật toán được sử dụng để thực hiện quá trình sắp xếp chính. Merge Sort hoạt động dựa trên nguyên lý chia để trị (Divide and Conquer), liên tục chia mảng thành các đoạn nhỏ hơn cho đến khi mỗi đoạn chỉ còn một phần tử, sau đó thực hiện quá trình trộn để tạo thành dãy đã được sắp xếp.
 - **Index Sorting** — Thay vì sắp xếp trực tiếp các đối tượng string, chương trình sử dụng một mảng chỉ số idx để lưu vị trí của từng chuỗi trong dữ liệu gốc. Trong toàn bộ quá trình Merge Sort, thuật toán chỉ thao tác trên các giá trị nguyên của mảng idx.
