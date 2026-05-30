@@ -179,50 +179,31 @@ N = 10.000 chuỗi.
 
 ### II. Lần chạy thứ hai
 
-# Thuật toán cài đặt tốt nhất ở lần thứ hai cùng các phương thức tối ưu hóa liên quan
+Thay đổi hoàn toàn phương pháp tiếp cận sang sự kết hợp giữa **Merge Sort** và **Index Sorting** nhằm giảm thiểu tối đa chi phí thao tác trên bộ nhớ (memory overhead) đối với dữ liệu chuỗi.
 
-Thuật toán được cài đặt ở lần chạy 2 là sự kết hợp của Merge Sort và Index Sorting.
+#### Tổng quan thuật toán
 
-## 1/ Tổng quan về thuật toán:
+- **Merge Sort** — thuật toán sắp xếp chính hoạt động theo nguyên lý Chia để trị (Divide and Conquer). Đảm bảo độ phức tạp thời gian luôn là O(N log N) trong mọi trường hợp, loại bỏ hoàn toàn các trường hợp suy biến (worst-case).
+- **Index Sorting** — thay vì can thiệp trực tiếp vào mảng chuỗi, chương trình duy trì một mảng chỉ số `idx` (kiểu `int`). Thuật toán chỉ di chuyển, hoán đổi các giá trị nguyên này.
+- **Custom Comparator** — tiêu chí so sánh được thiết kế phân cấp theo yêu cầu đề bài: (1) Chuỗi có độ dài ngắn hơn đứng trước; (2) Nếu cùng độ dài, chuỗi có thứ tự từ điển nhỏ hơn đứng trước.
 
-**a) Merge Sort:**
-Thuật toán được sử dụng để thực hiện quá trình sắp xếp chính. Merge Sort hoạt động dựa trên nguyên lý chia để trị (Divide and Conquer), liên tục chia mảng thành các đoạn nhỏ hơn cho đến khi mỗi đoạn chỉ còn một phần tử, sau đó thực hiện quá trình trộn để tạo thành dãy đã được sắp xếp.
+#### Sự kết hợp các thuật toán và Lý do lựa chọn
 
-**b) Index Sorting:**
-Thay vì sắp xếp trực tiếp các đối tượng string, chương trình sử dụng một mảng chỉ số `idx` để lưu vị trí của từng chuỗi trong dữ liệu gốc. Trong toàn bộ quá trình Merge Sort, thuật toán chỉ thao tác trên các giá trị nguyên của mảng `idx`.
+Mục tiêu cốt lõi của lần cài đặt thứ hai là tối ưu hóa quá trình di chuyển dữ liệu. Mặc dù Merge Sort có độ phức tạp lý thuyết là O(N log N), việc gán chép liên tục các đối tượng `string` (dài từ 10–100 ký tự) sẽ làm tăng hệ số hằng số (constant factor) rất lớn. 
 
-**c) Comparator:**
-Tiêu chí so sánh được xây dựng theo yêu cầu của đề bài. Chuỗi có độ dài nhỏ hơn sẽ đứng trước. Nếu hai chuỗi có cùng độ dài thì chuỗi có thứ tự từ điển nhỏ hơn sẽ đứng trước.
+Việc kết hợp với Index Sorting giải quyết triệt để vấn đề này: thao tác sắp xếp (Merge) chỉ diễn ra trên các giá trị nguyên (4 bytes). Dữ liệu chuỗi gốc đứng yên hoàn toàn. Điều này mang lại hiệu năng thực tế vượt trội trên các bộ dữ liệu lớn so với việc di chuyển chuỗi trực tiếp.
 
-## 2/ Sự kết hợp các thuật toán:
+#### Các phương pháp tối ưu hóa
 
-Merge Sort được sử dụng làm thuật toán sắp xếp chính nhờ khả năng duy trì độ phức tạp O(nlogn) trong mọi trường hợp. Trong quá trình sắp xếp, thuật toán không thao tác trực tiếp trên dữ liệu chuỗi mà sử dụng kỹ thuật Index Sorting để giảm chi phí di chuyển dữ liệu.
+**Tối ưu Merge Sort:**
+- **Pre-allocation (Cấp phát trước):** Mảng phụ `temp` được cấp phát động duy nhất một lần trước khi gọi đệ quy sắp xếp. Tránh được overhead của việc `new`/`delete` mảng liên tục trong quá trình Merge.
+- **In-place Update:** Dữ liệu sau khi trộn được ghi vào `temp`, rồi chép đè trực tiếp trở lại mảng `idx` ở đúng phân đoạn đang xử lý, tái sử dụng vùng nhớ hiệu quả.
 
-Mỗi lần cần so sánh hai phần tử, chương trình truy cập đến chuỗi tương ứng thông qua chỉ số trong mảng `idx` và áp dụng tiêu chí so sánh đã xây dựng.
+**Tối ưu Index Sorting:**
+- **Zero-Copy cho dữ liệu chuỗi:** Bỏ qua hoàn toàn việc sao chép nội dung chuỗi trong quá trình chia và trộn.
+- **Cache-friendly (Tối ưu Cache CPU):** Việc chỉ thao tác trên mảng số nguyên `idx` giúp dữ liệu chiếm ít không gian, nằm liên tục trên RAM, tận dụng tối đa bộ đệm Cache của CPU.
 
-## 3/ Lý do lựa chọn: Tối ưu tiếp tục so với lần 1?
-
-Mục tiêu của lần cài đặt thứ hai là tìm kiếm một phương án có khả năng giảm chi phí thao tác trên dữ liệu trong quá trình sắp xếp. 
-
-So với việc di chuyển trực tiếp các đối tượng string, việc chỉ di chuyển các giá trị nguyên giúp giảm lượng dữ liệu phải xử lý trong mỗi bước Merge. Ngoài ra, việc tái sử dụng bộ nhớ và tối ưu quá trình so sánh giúp cải thiện hiệu năng thực tế của chương trình trên các bộ dữ liệu lớn.
-
-Mặc dù độ phức tạp lý thuyết vẫn là O(nlogn), các phương pháp tối ưu hóa trên giúp giảm hệ số hằng số của thuật toán và nâng cao hiệu quả thực thi trong thực tế.
-
-## 4/ Các phương pháp tối ưu hóa được sử dụng trong thuật toán:
-
-**a) Đối với Merge Sort:**
-- Thuật toán sử dụng một mảng `temp` được cấp phát duy nhất một lần trước khi thực hiện sắp xếp.
-- Trong quá trình Merge, dữ liệu được ghi vào `temp` rồi sao chép trở lại `idx`.
-- Việc tái sử dụng bộ nhớ giúp giảm chi phí cấp phát động nhiều lần.
-- Merge Sort được lựa chọn vì luôn đảm bảo độ phức tạp O(nlogn) trong mọi trường hợp, tránh các trường hợp xấu có thể xảy ra ở một số thuật toán sắp xếp khác.
-
-**b) Đối với Index Sorting:**
-- Thay vì di chuyển trực tiếp các đối tượng string có độ dài từ 10 đến 100 ký tự, thuật toán chỉ di chuyển các giá trị nguyên trong mảng `idx`.
-- Dữ liệu chuỗi được giữ nguyên vị trí trong bộ nhớ, giúp giảm đáng kể chi phí sao chép dữ liệu trong quá trình Merge.
-- Việc thao tác trên dữ liệu kiểu `int` giúp tăng hiệu quả sử dụng cache của CPU do kích thước dữ liệu nhỏ và liên tục trong bộ nhớ.
-
-**c) Đối với hàm so sánh:**
-- Thuật toán ưu tiên so sánh độ dài chuỗi trước.
-- Chỉ khi hai chuỗi có cùng độ dài mới thực hiện so sánh từ điển.
-- Cách làm này giúp giảm số lần phải duyệt ký tự của chuỗi, đặc biệt hiệu quả khi dữ liệu chứa nhiều chuỗi có độ dài khác nhau.
-- Dữ liệu được lưu trữ trong `vector` để tận dụng khả năng truy cập ngẫu nhiên O(1).
+**Tối ưu Hàm so sánh (Comparator):**
+- **Early Exit (Thoát sớm):** So sánh độ dài chuỗi trước (phép toán O(1)). Nếu độ dài khác nhau, trả về kết quả ngay lập tức mà không cần đọc nội dung chuỗi.
+- **Lazy Evaluation:** Chỉ kích hoạt vòng lặp so sánh từng ký tự (thứ tự từ điển) khi và chỉ khi hai chuỗi có cùng độ dài. Rất hiệu quả với tập dữ liệu có độ phân tán độ dài cao.
+- **Tận dụng Random Access:** Tập dữ liệu gốc lưu trong `std::vector`, cho phép truy xuất mảng qua chỉ số nhánh `data[idx[i]]` với chi phí thời gian O(1).
