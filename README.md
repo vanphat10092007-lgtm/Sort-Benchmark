@@ -179,21 +179,50 @@ N = 10.000 chuỗi.
 
 ### II. Lần chạy thứ hai
 
-Thuật toán được chọn là **Merge Sort + Index Sorting**.
+# Thuật toán cài đặt tốt nhất ở lần thứ hai cùng các phương thức tối ưu hóa liên quan
 
-#### Tổng quan thuật toán
+Thuật toán được cài đặt ở lần chạy 2 là sự kết hợp của Merge Sort và Index Sorting.
 
-- **Merge Sort** — O(N log N) trong mọi trường hợp, tránh worst case của Quick Sort. Dùng mảng `temp` được cấp phát **một lần duy nhất** trước khi sắp xếp, tái sử dụng qua tất cả bước Merge.
-- **Index Sorting** — sắp xếp trên mảng chỉ số `idx` (kiểu `int`) thay vì trực tiếp trên đối tượng `string`. Dữ liệu chuỗi giữ nguyên vị trí trong bộ nhớ → chi phí sao chép trong mỗi bước Merge giảm đáng kể; thao tác trên `int` nhỏ và liên tục → tăng hiệu quả cache CPU.
-- **Comparator** — ưu tiên so sánh **độ dài** trước; chỉ so sánh từ điển khi hai chuỗi cùng độ dài, giảm số lần phải duyệt ký tự khi dữ liệu có nhiều chuỗi khác độ dài.
+## 1/ Tổng quan về thuật toán:
 
-#### Tối ưu tiếp tục so với lần 1
+**a) Merge Sort:**
+Thuật toán được sử dụng để thực hiện quá trình sắp xếp chính. Merge Sort hoạt động dựa trên nguyên lý chia để trị (Divide and Conquer), liên tục chia mảng thành các đoạn nhỏ hơn cho đến khi mỗi đoạn chỉ còn một phần tử, sau đó thực hiện quá trình trộn để tạo thành dãy đã được sắp xếp.
 
-Lần 1 (Bucket + Radix + Counting Sort) hiệu quả theo lý thuyết nhưng phức tạp về cài đặt và phụ thuộc nhiều vào đặc điểm phân phối dữ liệu. Lần 2 chọn hướng đơn giản hơn nhưng vẫn tối ưu hóa hệ số hằng số:
+**b) Index Sorting:**
+Thay vì sắp xếp trực tiếp các đối tượng string, chương trình sử dụng một mảng chỉ số `idx` để lưu vị trí của từng chuỗi trong dữ liệu gốc. Trong toàn bộ quá trình Merge Sort, thuật toán chỉ thao tác trên các giá trị nguyên của mảng `idx`.
 
-- **Một lần cấp phát bộ nhớ** cho mảng `temp` thay vì cấp phát động nhiều lần trong Merge.
-- **Thao tác trên `int`** thay vì `string` → dữ liệu nhỏ hơn, liên tục hơn trong bộ nhớ.
-- **So sánh độ dài trước** → tránh duyệt ký tự không cần thiết khi hai chuỗi khác độ dài.
-- Lưu trữ trong `vector` để truy cập ngẫu nhiên O(1).
+**c) Comparator:**
+Tiêu chí so sánh được xây dựng theo yêu cầu của đề bài. Chuỗi có độ dài nhỏ hơn sẽ đứng trước. Nếu hai chuỗi có cùng độ dài thì chuỗi có thứ tự từ điển nhỏ hơn sẽ đứng trước.
 
-Mặc dù độ phức tạp lý thuyết vẫn là O(N log N), các tối ưu trên giảm hệ số hằng số và cải thiện hiệu năng thực tế trên dữ liệu lớn.
+## 2/ Sự kết hợp các thuật toán:
+
+Merge Sort được sử dụng làm thuật toán sắp xếp chính nhờ khả năng duy trì độ phức tạp O(nlogn) trong mọi trường hợp. Trong quá trình sắp xếp, thuật toán không thao tác trực tiếp trên dữ liệu chuỗi mà sử dụng kỹ thuật Index Sorting để giảm chi phí di chuyển dữ liệu.
+
+Mỗi lần cần so sánh hai phần tử, chương trình truy cập đến chuỗi tương ứng thông qua chỉ số trong mảng `idx` và áp dụng tiêu chí so sánh đã xây dựng.
+
+## 3/ Lý do lựa chọn: Tối ưu tiếp tục so với lần 1?
+
+Mục tiêu của lần cài đặt thứ hai là tìm kiếm một phương án có khả năng giảm chi phí thao tác trên dữ liệu trong quá trình sắp xếp. 
+
+So với việc di chuyển trực tiếp các đối tượng string, việc chỉ di chuyển các giá trị nguyên giúp giảm lượng dữ liệu phải xử lý trong mỗi bước Merge. Ngoài ra, việc tái sử dụng bộ nhớ và tối ưu quá trình so sánh giúp cải thiện hiệu năng thực tế của chương trình trên các bộ dữ liệu lớn.
+
+Mặc dù độ phức tạp lý thuyết vẫn là O(nlogn), các phương pháp tối ưu hóa trên giúp giảm hệ số hằng số của thuật toán và nâng cao hiệu quả thực thi trong thực tế.
+
+## 4/ Các phương pháp tối ưu hóa được sử dụng trong thuật toán:
+
+**a) Đối với Merge Sort:**
+- Thuật toán sử dụng một mảng `temp` được cấp phát duy nhất một lần trước khi thực hiện sắp xếp.
+- Trong quá trình Merge, dữ liệu được ghi vào `temp` rồi sao chép trở lại `idx`.
+- Việc tái sử dụng bộ nhớ giúp giảm chi phí cấp phát động nhiều lần.
+- Merge Sort được lựa chọn vì luôn đảm bảo độ phức tạp O(nlogn) trong mọi trường hợp, tránh các trường hợp xấu có thể xảy ra ở một số thuật toán sắp xếp khác.
+
+**b) Đối với Index Sorting:**
+- Thay vì di chuyển trực tiếp các đối tượng string có độ dài từ 10 đến 100 ký tự, thuật toán chỉ di chuyển các giá trị nguyên trong mảng `idx`.
+- Dữ liệu chuỗi được giữ nguyên vị trí trong bộ nhớ, giúp giảm đáng kể chi phí sao chép dữ liệu trong quá trình Merge.
+- Việc thao tác trên dữ liệu kiểu `int` giúp tăng hiệu quả sử dụng cache của CPU do kích thước dữ liệu nhỏ và liên tục trong bộ nhớ.
+
+**c) Đối với hàm so sánh:**
+- Thuật toán ưu tiên so sánh độ dài chuỗi trước.
+- Chỉ khi hai chuỗi có cùng độ dài mới thực hiện so sánh từ điển.
+- Cách làm này giúp giảm số lần phải duyệt ký tự của chuỗi, đặc biệt hiệu quả khi dữ liệu chứa nhiều chuỗi có độ dài khác nhau.
+- Dữ liệu được lưu trữ trong `vector` để tận dụng khả năng truy cập ngẫu nhiên O(1).
