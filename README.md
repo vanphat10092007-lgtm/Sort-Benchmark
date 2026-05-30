@@ -116,8 +116,7 @@ Giữ nguyên cấu trúc Introsort, khắc phục hai điểm yếu cụ thể 
 
 Lần 1 dùng 2-way partition: phần tử bằng pivot vẫn bị chia vào hai nửa và tiếp tục đệ quy → mất cân bằng → O(N²) khi nhiều chuỗi trùng nhau.
 
-Lần 2 chia thành `[ < pivot | = pivot | > pivot ]`; phần tử bằng pivot xử lý xong trong một lần, không đệ quy vào lại. Test 3 giảm từ timeout (O(N²)) về ~25 ms.
-
+Lần 2 chia thành `[ < pivot | = pivot | > pivot ]`; phần tử bằng pivot xử lý xong trong một lần, không đệ quy vào lại.
 **2. Thay hàm so sánh tự viết bằng `memcmp()`**
 
 Hàm `cmp()` lần 1 dùng `while` so sánh từng ký tự một: chuỗi 90 ký tự prefix giống nhau cần 90 bước mỗi lần.
