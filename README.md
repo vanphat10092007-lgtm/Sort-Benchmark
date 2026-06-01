@@ -110,9 +110,9 @@ N = 100.000 chuỗi, độ dài 10–100, tập `a–z`. Seed cố định `mt19
 
 ### II. Lần chạy thứ hai
 
-Giữ nguyên cấu trúc Introsort, khắc phục hai điểm yếu cụ thể của lần 1.
+Giữ nguyên cấu trúc Introsort, khắc phục điểm yếu cụ thể của lần 1.
 
-**1. Thay 2-way partition bằng 3-way partition (Dutch National Flag)**
+** Thay 2-way partition bằng 3-way partition (Dutch National Flag)**
 
 Lần 1 dùng 2-way partition: phần tử bằng pivot vẫn bị chia vào hai nửa và tiếp tục đệ quy → mất cân bằng → O(N²) khi nhiều chuỗi trùng nhau.
 
