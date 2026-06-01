@@ -19,7 +19,7 @@
 
 ---
 
-## A. INT — Sắp xếp mảng số nguyên
+## A. Integer Sort — Sắp xếp mảng số nguyên
 
 ### I. Lần chạy đầu tiên
 
@@ -64,7 +64,7 @@ Hàm được gọi mỗi lần phân hoạch; khai báo `inline` loại bỏ ov
 
 ---
 
-## B. STRLEXI — Sắp xếp chuỗi theo thứ tự từ điển
+## B. Lexicographic Sort — Sắp xếp chuỗi theo thứ tự từ điển
 
 ### I. Lần chạy đầu tiên
 
@@ -118,7 +118,7 @@ Lần 1 dùng 2-way partition: phần tử bằng pivot vẫn bị chia vào hai
 
 Lần 2 chia thành `[ < pivot | = pivot | > pivot ]`; phần tử bằng pivot xử lý xong trong một lần, không đệ quy vào lại.
 
-## C. STRLENLEXI — Sắp xếp chuỗi theo độ dài rồi từ điển
+## C. Length-aware Lexicographic String Sort — Sắp xếp chuỗi theo độ dài rồi từ điển
 
 ### I. Lần chạy đầu tiên
 
