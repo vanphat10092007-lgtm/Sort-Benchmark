@@ -117,13 +117,6 @@ Giữ nguyên cấu trúc Introsort, khắc phục hai điểm yếu cụ thể 
 Lần 1 dùng 2-way partition: phần tử bằng pivot vẫn bị chia vào hai nửa và tiếp tục đệ quy → mất cân bằng → O(N²) khi nhiều chuỗi trùng nhau.
 
 Lần 2 chia thành `[ < pivot | = pivot | > pivot ]`; phần tử bằng pivot xử lý xong trong một lần, không đệ quy vào lại.
-**2. Thay hàm so sánh tự viết bằng `memcmp()`**
-
-Hàm `cmp()` lần 1 dùng `while` so sánh từng ký tự một: chuỗi 90 ký tự prefix giống nhau cần 90 bước mỗi lần.
-
-`memcmp()` được compiler và CPU tối ưu sẵn, so sánh 16–32 byte/lần. Với chuỗi 100 ký tự chỉ cần 4–7 lần thay vì 100. Để tránh gọi `strlen()` lặp lại, chương trình lưu thêm mảng `lens[]` chứa độ dài từng chuỗi.
-
----
 
 ## C. STRLENLEXI — Sắp xếp chuỗi theo độ dài rồi từ điển
 
